@@ -59,9 +59,9 @@
 class BearSSLClient : public Client {
 
 public:
-  BearSSLClient(Client& client);
-  BearSSLClient(Client& client, const br_x509_trust_anchor* myTAs, int myNumTAs);
-  BearSSLClient(Client* client, const br_x509_trust_anchor* myTAs, int myNumTAs);
+  BearSSLClient(Client& client, size_t input_buffer_size = BEAR_SSL_CLIENT_IBUF_SIZE);
+  BearSSLClient(Client& client, const br_x509_trust_anchor* myTAs, int myNumTAs, size_t input_buffer_size = BEAR_SSL_CLIENT_IBUF_SIZE);
+  BearSSLClient(Client* client, const br_x509_trust_anchor* myTAs, int myNumTAs, size_t input_buffer_size = BEAR_SSL_CLIENT_IBUF_SIZE);
   virtual ~BearSSLClient();
 
 
@@ -128,7 +128,8 @@ private:
 
   br_ssl_client_context _sc;
   br_x509_minimal_context _xc;
-  unsigned char _ibuf[BEAR_SSL_CLIENT_IBUF_SIZE];
+  //unsigned char _ibuf[BEAR_SSL_CLIENT_IBUF_SIZE];
+  unsigned char* _ibuf;
   unsigned char _obuf[BEAR_SSL_CLIENT_OBUF_SIZE];
   br_sslio_context _ioc;
 };

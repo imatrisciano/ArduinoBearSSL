@@ -33,17 +33,17 @@
 
 #include "BearSSLClient.h"
 
-BearSSLClient::BearSSLClient(Client& client) :
-  BearSSLClient(&client, TAs, TAs_NUM)
+BearSSLClient::BearSSLClient(Client& client, size_t input_buffer_size) :
+  BearSSLClient(&client, TAs, TAs_NUM, input_buffer_size)
 {
 }
 
-BearSSLClient::BearSSLClient(Client& client, const br_x509_trust_anchor* myTAs, int myNumTAs)
-: BearSSLClient(&client, myTAs, myNumTAs)
+BearSSLClient::BearSSLClient(Client& client, const br_x509_trust_anchor* myTAs, int myNumTAs, size_t input_buffer_size)
+: BearSSLClient(&client, myTAs, myNumTAs, input_buffer_size)
 {
 }
 
-BearSSLClient::BearSSLClient(Client* client, const br_x509_trust_anchor* myTAs, int myNumTAs) :
+BearSSLClient::BearSSLClient(Client* client, const br_x509_trust_anchor* myTAs, int myNumTAs, size_t input_buffer_size) :
   _client(client),
   _TAs(myTAs),
   _numTAs(myNumTAs),
@@ -51,6 +51,7 @@ BearSSLClient::BearSSLClient(Client* client, const br_x509_trust_anchor* myTAs, 
   _skeyDecoder(NULL),
   _ecChainLen(0)
 {
+  _ibuf = (unsigned char*) malloc(input_buffer_size);
 #ifndef ARDUINO_DISABLE_ECCX08
   _ecVrfy = eccX08_vrfy_asn1;
   _ecSign = eccX08_sign_asn1;
@@ -72,6 +73,8 @@ BearSSLClient::BearSSLClient(Client* client, const br_x509_trust_anchor* myTAs, 
 
 BearSSLClient::~BearSSLClient()
 {
+  free(_ibuf);
+
   if (_ecCertDynamic && _ecCert[0].data) {
     free(_ecCert[0].data);
     _ecCert[0].data = NULL;
