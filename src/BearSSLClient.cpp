@@ -51,6 +51,7 @@ BearSSLClient::BearSSLClient(Client* client, const br_x509_trust_anchor* myTAs, 
   _skeyDecoder(NULL),
   _ecChainLen(0)
 {
+  _ibuf_size = input_buffer_size;
   _ibuf = (unsigned char*) malloc(input_buffer_size);
 #ifndef ARDUINO_DISABLE_ECCX08
   _ecVrfy = eccX08_vrfy_asn1;
@@ -442,7 +443,7 @@ int BearSSLClient::connectSSL(const char* host)
   // initialize client context with all algorithms and hardcoded trust anchors
   br_ssl_client_init_full(&_sc, &_xc, _TAs, _numTAs);
 
-  br_ssl_engine_set_buffers_bidi(&_sc.eng, _ibuf, sizeof(_ibuf), _obuf, sizeof(_obuf));
+  br_ssl_engine_set_buffers_bidi(&_sc.eng, _ibuf, _ibuf_size, _obuf, sizeof(_obuf));
 
   // inject entropy in engine
   unsigned char entropy[32];

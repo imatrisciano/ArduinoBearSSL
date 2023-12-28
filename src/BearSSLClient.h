@@ -129,6 +129,7 @@ private:
   br_ssl_client_context _sc;
   br_x509_minimal_context _xc;
   //unsigned char _ibuf[BEAR_SSL_CLIENT_IBUF_SIZE];
+  size_t _ibuf_size;
   unsigned char* _ibuf;
   unsigned char _obuf[BEAR_SSL_CLIENT_OBUF_SIZE];
   br_sslio_context _ioc;
