@@ -13,6 +13,15 @@ This library depends on ArduinoECCX08. This dependency could be
 disabled by defining ARDUINO_DISABLE_ECCX08 in ArduinoBearSSLConfig.h
 (see examples).
 
+== Fork changes ==
+You can now choose an input buffer size to be dynamically allocated
+
+```
+const size_t IN_BUFFER_SIZE = 16384+325;
+EthernetClient ethernetClient;
+BearSSLClient bearSSLClient(ethernetClient, IN_BUFFER_SIZE);
+```
+
 == License ==
 
 Copyright (c) 2018 Arduino SA. All rights reserved.
